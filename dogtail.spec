@@ -4,7 +4,7 @@
 #
 Name     : dogtail
 Version  : 0.9.9
-Release  : 8
+Release  : 9
 URL      : http://pypi.debian.net/dogtail/dogtail-0.9.9.tar.gz
 Source0  : http://pypi.debian.net/dogtail/dogtail-0.9.9.tar.gz
 Summary  : GUI test tool and automation framework that uses Accessibility (a11y) technologies to communicate with desktop applications.
