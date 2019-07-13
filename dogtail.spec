@@ -4,7 +4,7 @@
 #
 Name     : dogtail
 Version  : 0.9.10
-Release  : 12
+Release  : 13
 URL      : http://pypi.debian.net/dogtail/dogtail-0.9.10.tar.gz
 Source0  : http://pypi.debian.net/dogtail/dogtail-0.9.10.tar.gz
 Summary  : GUI test tool and automation framework
