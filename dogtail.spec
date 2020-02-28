@@ -4,22 +4,18 @@
 #
 Name     : dogtail
 Version  : 0.9.10
-Release  : 15
+Release  : 16
 URL      : http://pypi.debian.net/dogtail/dogtail-0.9.10.tar.gz
 Source0  : http://pypi.debian.net/dogtail/dogtail-0.9.10.tar.gz
 Summary  : GUI test tool and automation framework
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: dogtail-bin
-Requires: dogtail-python3
-Requires: dogtail-data
-Requires: dogtail-license
-Requires: dogtail-python
+Requires: dogtail-bin = %{version}-%{release}
+Requires: dogtail-data = %{version}-%{release}
+Requires: dogtail-license = %{version}-%{release}
+Requires: dogtail-python = %{version}-%{release}
+Requires: dogtail-python3 = %{version}-%{release}
 BuildRequires : buildreq-distutils3
-BuildRequires : pbr
-BuildRequires : pip
-BuildRequires : python3-dev
-BuildRequires : setuptools
 
 %description
 GUI test tool and automation framework that uses assistive technologies to
@@ -28,8 +24,8 @@ communicate with desktop applications.
 %package bin
 Summary: bin components for the dogtail package.
 Group: Binaries
-Requires: dogtail-data
-Requires: dogtail-license
+Requires: dogtail-data = %{version}-%{release}
+Requires: dogtail-license = %{version}-%{release}
 
 %description bin
 bin components for the dogtail package.
@@ -62,7 +58,7 @@ license components for the dogtail package.
 %package python
 Summary: python components for the dogtail package.
 Group: Default
-Requires: dogtail-python3
+Requires: dogtail-python3 = %{version}-%{release}
 
 %description python
 python components for the dogtail package.
@@ -72,6 +68,7 @@ python components for the dogtail package.
 Summary: python3 components for the dogtail package.
 Group: Default
 Requires: python3-core
+Provides: pypi(dogtail)
 
 %description python3
 python3 components for the dogtail package.
@@ -79,20 +76,29 @@ python3 components for the dogtail package.
 
 %prep
 %setup -q -n dogtail-0.9.10
+cd %{_builddir}/dogtail-0.9.10
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1532187925
-python3 setup.py build -b py3
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1582920754
+# -Werror is for werrorists
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/dogtail
-cp COPYING %{buildroot}/usr/share/doc/dogtail/COPYING
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/dogtail
+cp %{_builddir}/dogtail-0.9.10/COPYING %{buildroot}/usr/share/package-licenses/dogtail/b47456e2c1f38c40346ff00db976a2badf36b5e3
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -144,8 +150,8 @@ echo ----[ mark ]----
 %doc /usr/share/doc/dogtail/*
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/dogtail/COPYING
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/dogtail/b47456e2c1f38c40346ff00db976a2badf36b5e3
 
 %files python
 %defattr(-,root,root,-)
